@@ -28,6 +28,8 @@ class User(PaginatedAPIMixin,UserMixin,db.Model):
     #user resource    
     token = db.Column(db.String(32),index=True,unique=True)
     token_expiration = db.Column(db.DateTime)
+    note = db.Column(db.Text)
+    
 
 
 

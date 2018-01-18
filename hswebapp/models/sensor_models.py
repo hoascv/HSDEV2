@@ -82,6 +82,14 @@ class TempLog(db.Model):
         self.sensorType = sensorType
         self.value=value
     
+    def __init__ (self,id,sensor,rdate,sensorLocation,sensorType,value):
+        self.id= id
+        self.sensor=sensor
+        self.rdate = rdate
+        self.sensorLocation = sensorLocation
+        self.sensorType = sensorType
+        self.value=value
+    
     def __repr__(self):
         return '<TempLog {}>'.format(self.sensorType)
     

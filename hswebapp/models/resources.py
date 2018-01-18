@@ -1,7 +1,7 @@
 from datetime import datetime
 from hswebapp import db,model_saved,ma
 from hswebapp.models.sensor_models import TempLog,PowerLog,PressureLog,HumidityLog 
-from marshmallow import fields
+from marshmallow import fields,post_load
 from flask import  url_for,jsonify
 
  
@@ -10,6 +10,26 @@ class TypeObject(fields.Field):
         return type(obj)
         
  
+ 
+class TempLogSchema(ma.Schema):
+    id = fields.Float()
+    sensor= fields.String()
+    value = fields.Float()
+    rdate  = fields.DateTime()
+    sensorType = fields.String()
+    sensorLocation = fields.String()
+    
+    
+    #@post_load
+    #def create_log(self, data):
+    #    new_log = TempLog(**data)
+    #    new_log.save_to_db
+    #    return new_log
+        
+templog_schema = TempLogSchema() 
+
+
+
   
 class SensorLogSchema(ma.Schema):
     #class Meta:

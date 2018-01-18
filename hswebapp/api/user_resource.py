@@ -11,7 +11,8 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from hswebapp.models.system_models import User,Logs
 import copy
 from hswebapp.api import apiv0
-from hswebapp.api.auth import token_auth
+from hswebapp.api.auth import token_auth,basic_auth
+
 
 #GET /api/users/<id> Return a user.
 #GET /api/users Return the collection of all users.
@@ -36,10 +37,70 @@ def get_users():
     per_page = min(request.args.get('per_page', 2, type=int), 100)
     data = User.to_collection_dict(User.query, page, per_page, 'apiv0.get_users')
     return jsonify(data)
+    
+    
+    
+@apiv0.route('/signup', methods=['POST'])
+
+def create_user():
+    data = request.get_json() or {}
+    
+    if 'email' not in data or 'password' not in data:
+    
+    #if 'username' not in data or 'email' not in data or 'password' not in data:
+        return jsonify({"message": "must include email / password "}), 400 
+    try:
+        check_user = User.query.filter((User.email==data['email']) | (User.username == data['email'].split('@')[0])).first()
+            
+    except Exception as e:
+        app.logger.error("Error reading BD: {} ".format(e))
+        db.session.rollback()
+        return jsonify({"message": "Error processing your request try again later"}), 503
+    
+    finally:    
+        db.session.close()
+           
+    if check_user : return jsonify({"message": "User {} already exists choose another one".format(check_user.username)}), 400
+
+        
+   
+
+   
+    user = User()
+    user.from_dict(data, new_user=True)
+    if user.username is None: user.username = data['email'].split('@')[0] 
+   
+    
+    db.session.add(user)
+    db.session.commit()
+    #response = jsonify(user.to_dict())
+    #response.status_code = 201
+    
+    return jsonify({"message": "user {} has been created".format(user.username)}), 201
+    
+    
+    
+    #data = request.get_json() or {}
+    #if 'username' not in data or 'email' not in data or 'password' not in data:
+    #    return {"message": "must include username/email password "}, 400    
+    #if User.query.filter_by(username=data['email']).first():
+    #    return {"message": "please use a diferent username"}, 400     
+    #user = User()
+    #user.from_dict(data, new_user=True)
+    #db.session.add(user)
+    #db.session.commit()
+    #response = jsonify(user.to_dict())
+    #response.status_code = 201
+    #response.headers['Location'] = url_for('api.get_user', id=user.id)
+    #return {"message": "user created"}, 201
 
 
 
-
+    
+    
+    
+    
+    
 
 
 

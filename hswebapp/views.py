@@ -209,4 +209,9 @@ def dashboard_event():
 def make_shell_context():
     return{'db':db,'User':User, 'Templog':TempLog}    
     
+@views.route('/update_templog', methods=['POST'])
+def update_templog():
+    data = request.get_json() or {}
+    
+    return jsonify({"message": "temperature value {} ".format(data.value)}), 201
     

@@ -55,5 +55,11 @@ class EditUserForm(FlaskForm):
     isActivated =BooleanField('IsActivated')
     acess_group =SelectField('Access Group',coerce=int)
     #http://wtforms.simplecodes.com/docs/0.6/fields.html
+    
+    def validate_acess_group(form, field):
+        if field.data is None:
+            raise ValidationError("Not a valid access group")
+
+    
     submit = SubmitField('Update')
     

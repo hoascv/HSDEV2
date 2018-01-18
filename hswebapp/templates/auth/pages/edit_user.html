@@ -52,7 +52,9 @@
                             <div class="col-sm-4 form-group">
 								<label>{{ form.acess_group.label }}</label>
                                 {{form.acess_group(class_="form-control") }}
-								
+								{% for error in form.acess_group.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                                {% endfor %}  
 							</div>
                             	
 						</div>
