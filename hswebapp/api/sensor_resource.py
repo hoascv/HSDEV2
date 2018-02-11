@@ -36,7 +36,10 @@ def get_sensorlogs():
     return jsonify(data)
 
 @apiv0.route('/templog', methods=['POST'])
-def create_register():
+def create_log():
+    
+    sensor_type = request.args.get('sensor_type', 'PressureLog', type=str)
+    
     json_data = request.get_json() or {}
     if not json_data:
         return jsonify({'message': 'No input data provided'}), 400
@@ -46,13 +49,15 @@ def create_register():
     if errors:
         return jsonify(errors), 422 
     
-    new_log = TempLog(**data)
-    
     try:
-        log = TempLog.query.filter_by(id=new_log.id).first()
+        #log = sensor_class.query.filter_by(id=new_log.id).first()
+        sensor_class = globals()[sensor_type]
+        log =sensor_class.query.get(data['id'])
+        
         if log:
-            return jsonify({"message": "The log already exists","id":log.id}), 400
-            
+            return jsonify({"message": "The log already exists","id":log.id}), 409
+        else :
+            new_log = sensor_class(**data)
     except Exception as e:
         app.logger.error("Error BD: {} ".format(e))
         db.session.rollback()
@@ -74,4 +79,6 @@ def create_register():
     
        
     return jsonify({"message": "Created new log.","id": new_log.id}),201
-    
+#http://marshmallow.readthedocs.io/en/latest/examples.html
+
+

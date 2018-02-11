@@ -28,6 +28,23 @@ class TempLogSchema(ma.Schema):
         
 templog_schema = TempLogSchema() 
 
+class HumLogSchema(ma.Schema):
+    id = fields.Float()
+    sensor= fields.String()
+    value = fields.Float()
+    rdate  = fields.DateTime()
+    sensorType = fields.String()
+    sensorLocation = fields.String()
+    
+    
+    #@post_load
+    #def create_log(self, data):
+    #    new_log = TempLog(**data)
+    #    new_log.save_to_db
+    #    return new_log
+        
+humlog_schema = HumLogSchema() 
+
 
 
   

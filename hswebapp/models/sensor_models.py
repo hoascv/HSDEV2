@@ -19,6 +19,14 @@ class HumidityLog(db.Model):
         self.sensorType = sensorType
         self.value=value
     
+    def __init__ (self,id,sensor,rdate,sensorLocation,sensorType,value):
+        self.id= id
+        self.sensor=sensor
+        self.rdate = rdate
+        self.sensorLocation = sensorLocation
+        self.sensorType = sensorType
+        self.value=value
+    
     def __repr__(self):
         return '<HumidityLog {}>'.format(self.sensorType)
     
@@ -162,6 +170,14 @@ class PressureLog(db.Model):
         self.sensorType = sensorType
         self.value=value
     
+    def __init__ (self,id,sensor,rdate,sensorLocation,sensorType,value):
+        self.id= id
+        self.sensor=sensor
+        self.rdate = rdate
+        self.sensorLocation = sensorLocation
+        self.sensorType = sensorType
+        self.value=value
+    
     def __repr__(self):
         return '<PressureLog {}>'.format(self.sensorType)
         
@@ -219,6 +235,15 @@ class PowerLog(db.Model):
     sensorType = db.Column(db.String(15))
     
     def __init__ (self,sensor,rdate,sensorLocation,sensorType,voltage,current):
+        self.rdate = rdate
+        self.sensorLocation = sensorLocation
+        self.sensorType = sensorType
+        self.voltage=voltage
+        self.current = current
+        self.sensor=sensor
+    
+    def __init__ (self,id,sensor,rdate,sensorLocation,sensorType,voltage,current):
+        self.id=id
         self.rdate = rdate
         self.sensorLocation = sensorLocation
         self.sensorType = sensorType
